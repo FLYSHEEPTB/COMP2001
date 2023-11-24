@@ -1,0 +1,254 @@
+ SQL
+CREATE TABLE Account (
+  Email varchar(32)   NOT NULL,
+  Password varchar(64)   NOT NULL,
+  Profile_no int  NOT NULL
+);
+CREATE TABLE Achievement (
+  Achievement_no int IDENTITY(1,1) NOT NULL,
+  Description varchar(255)   NOT NULL,
+  Condition int NOT NULL
+);
+CREATE TABLE Comment (
+  Comment_no int IDENTITY(1,1) NOT NULL,
+  Profile_no int  NOT NULL,
+  Trail_no int  NOT NULL,
+  Comment_content varchar(255)   NOT NULL,
+  Comment_time datetime  NULL
+);
+CREATE TABLE Follow (
+  Follow_no int IDENTITY(1,1) NOT NULL,
+  Followed_no int  NULL,
+  Follower_no int  NULL
+);
+CREATE TABLE Profile (
+  Profile_no int  IDENTITY(1,1) NOT NULL,
+  First_name varchar(32)   NOT NULL,
+  Last_name varchar(32)   NOT NULL,
+  About varchar(255)   NULL,
+  Location varchar(32)   NULL,
+  Units varchar(16)   NULL,
+  Time_preference varchar(16)   NULL,
+  Height int  NULL,
+  Weight int  NULL,
+  Birthday date  NULL,
+  Language varchar(16)   NULL
+);
+CREATE TABLE Profile_Achievement (
+  Data_no int  IDENTITY(1,1) NOT NULL,
+  Profile_no int  NOT NULL,
+  Achievement_no int NULL,
+  Distance int NOT NULL
+);
+CREATE TABLE Region (
+  Region_no int  IDENTITY(1,1) NOT NULL,
+  Location varchar(255)   NULL
+);
+CREATE TABLE Review (
+  Review_no int  IDENTITY(1,1) NOT NULL,
+  star smallint  NOT NULL,
+  Review_content varchar(255)   NOT NULL,
+  Profile_no int  NOT NULL,
+  Trail_no int  NOT NULL
+);
+CREATE TABLE Trail_Route (
+  Link_no int  IDENTITY(1,1) NOT NULL,
+  Trail_no int  NOT NULL,
+  Region_no int  NOT NULL,
+  orders int  NULL
+);
+CREATE TABLE Trail (
+  Trail_no int  IDENTITY(1,1) NOT NULL,
+  Trail_name varchar(64)   NOT NULL,
+  Image varchar(255)   NULL,
+  star float(53)  NULL,
+  Length float(53)  NULL
+);
+ALTER TABLE Account ADD PRIMARY KEY (Email);
+ALTER TABLE Achievement ADD PRIMARY KEY (Achievement_no);
+ALTER TABLE Comment ADD PRIMARY KEY (Comment_no);
+ALTER TABLE Follow ADD PRIMARY KEY (Follow_no);
+ALTER TABLE Profile ADD PRIMARY KEY (Profile_no);
+ALTER TABLE Profile_Achievement ADD PRIMARY KEY (Data_no);
+ALTER TABLE Region ADD PRIMARY KEY (Region_no);
+ALTER TABLE Review ADD PRIMARY KEY (Review_no);
+ALTER TABLE Trail ADD PRIMARY KEY (Trail_no);
+ALTER TABLE Account ADD CONSTRAINT fk_Profile_no FOREIGN KEY (Profile_no) REFERENCES Profile (Profile_no);
+ALTER TABLE Comment ADD CONSTRAINT fk_co_Profile_no FOREIGN KEY (Profile_no) REFERENCES Profile (Profile_no);
+ALTER TABLE Comment ADD CONSTRAINT fk_co_Trail_no FOREIGN KEY (Trail_no) REFERENCES Trail (Trail_no);
+ALTER TABLE Follow ADD CONSTRAINT fk_Follower_no FOREIGN KEY (Follower_no) REFERENCES Profile (Profile_no);
+ALTER TABLE Follow ADD CONSTRAINT fk_Followed_no FOREIGN KEY (Followed_no) REFERENCES Profile (Profile_no);
+ALTER TABLE Profile_Achievement ADD CONSTRAINT fk_ach_Profile_no FOREIGN KEY (Profile_no) REFERENCES Profile (Profile_no);
+ALTER TABLE Profile_Achievement ADD CONSTRAINT fk_ach_Ach_no FOREIGN KEY (Achievement_no) REFERENCES Achievement (Achievement_no) ;
+ALTER TABLE Review ADD CONSTRAINT fk_re_Profile_no FOREIGN KEY (Profile_no) REFERENCES Profile (Profile_no);
+ALTER TABLE Review ADD CONSTRAINT fk_re_Trail_no FOREIGN KEY (Trail_no) REFERENCES Trail (Trail_no);
+ALTER TABLE Trail_Route ADD CONSTRAINT fk_Region_no FOREIGN KEY (Region_no) REFERENCES Region (Region_no);
+ALTER TABLE Trail_Route ADD CONSTRAINT fk_Trail_no FOREIGN KEY (Trail_no) REFERENCES Trail (Trail_no);
+INSERT INTO Achievement ( Description, Condition) VALUES ( 'achieve 50 KM', '50');
+INSERT INTO Achievement ( Description, Condition) VALUES ( 'achieve 100 KM', '100' );
+INSERT INTO Achievement ( Description, Condition) VALUES ( 'achieve 200 KM', '200');
+INSERT INTO Achievement ( Description, Condition) VALUES ('achieve 500 KM', '500');
+INSERT INTO Achievement ( Description, Condition) VALUES ( 'achieve 1000 KM', '1000');
+
+INSERT INTO Profile ( First_name, Last_name, About, Location, Units, Time_preference, Height, Weight, Birthday, Language) VALUES ( 'Grace', 'Hopper', NULL, 'Sydney', 'Metric', 'Pace', '162', '60', '1995-11-19', 'English(US)');
+INSERT INTO Profile ( First_name, Last_name, About, Location, Units, Time_preference, Height, Weight, Birthday, Language) VALUES ( 'Tim', 'Berners-Lee', NULL, 'Japa', 'Metric', 'Pace', '180', '65', '1996-11-02', 'English(US)');
+INSERT INTO Profile ( First_name, Last_name, About, Location, Units, Time_preference, Height, Weight, Birthday, Language) VALUES ( 'Ada', 'Lovelace', NULL, 'China', 'Metric', 'Pace', '157', '62', '1992-06-07', 'English(US)');
+INSERT INTO Trail ( Trail_name, Image, star, Length) VALUES ( 'Mount Takao: Trail 6 - Trail 4', NULL, '4.5', '6.8');
+INSERT INTO Trail ( Trail_name, Image, star, Length) VALUES ( 'Mount Imakura - Kon Falls - Komine Park', NULL, '4.7', '6.1');
+INSERT INTO Trail ( Trail_name, Image, star, Length) VALUES ( 'Todoroki Valley Trail', NULL, '4.2', '1.4');
+INSERT INTO Region ( Location) VALUES ( 'Biwa Falls');
+INSERT INTO Region ( Location) VALUES ( 'The summit');
+INSERT INTO Region ( Location) VALUES ( 'Takaosan Monkey Park');
+INSERT INTO Region ( Location) VALUES ( 'Mount Imakura');
+INSERT INTO Region ( Location) VALUES ( 'Konga Falls');
+INSERT INTO Region ( Location) VALUES ( 'Komine Park');
+INSERT INTO Region ( Location) VALUES ( 'Todoroki Valley');
+INSERT INTO Review (star, Review_content, Profile_no, Trail_no) VALUES ( '4', 'nice trail', '1', '1');
+INSERT INTO Review (star, Review_content, Profile_no, Trail_no) VALUES ( '4', 'it makes me happy, i enjoy it', '3', '2');
+INSERT INTO Comment ( Profile_no, Trail_no, Comment_content, Comment_time) VALUES ( '1', '1', 'i think it a little hard, but i like', '2023-11-19 23:59:17.000');
+INSERT INTO Comment ( Profile_no, Trail_no, Comment_content, Comment_time) VALUES ( '3', '2', 'it is so easy, ha ha', '2023-09-05 23:59:50.000');
+INSERT INTO Profile_Achievement ( Profile_no, Achievement_no, Distance) VALUES ( '1', '3', '0');
+INSERT INTO Trail_Route ( Trail_no, Region_no, orders) VALUES ( '1', '1', '1');
+INSERT INTO Trail_Route ( Trail_no, Region_no, orders) VALUES ( '1', '2', '2');
+INSERT INTO Trail_Route ( Trail_no, Region_no, orders) VALUES ( '1', '3', '3');
+
+INSERT INTO Trail_Route ( Trail_no, Region_no, orders) VALUES ( '2', '4', '1');
+INSERT INTO Trail_Route ( Trail_no, Region_no, orders) VALUES ( '2', '5', '2');
+INSERT INTO Trail_Route ( Trail_no, Region_no, orders) VALUES ( '2', '6', '3');
+INSERT INTO Trail_Route ( Trail_no, Region_no, orders) VALUES ( '3', '7', '1');
+INSERT INTO Account (Email, Password, Profile_no) VALUES ('ada@plymouth.ac.uk', 'insecurePassword', '3');
+INSERT INTO Account (Email, Password, Profile_no) VALUES ('grace@plymouth.ac.uk', 'ISAD123!', '1');
+INSERT INTO Account (Email, Password, Profile_no) VALUES ('tim@plymouth.ac.uk', 'COMP2001!', '2');
+INSERT INTO Follow ( Followed_no, Follower_no) VALUES ( 1, 2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+View
+CREATE VIEW Users AS
+SELECT COALESCE(COUNT(Follow.Followed_no), 0) AS FollowerNumber ,
+Profile.Profile_no
+FROM Profile
+LEFT JOIN Follow
+ON Profile.Profile_no = Follow.Followed_no
+GROUP BY Profile.Profile_no
+
+
+
+
+
+
+
+
+
+
+
+
+
+Procedure
+CREATE PROCEDURE AddRegion (
+	@Location as VARCHAR(64)
+) AS
+BEGIN 
+	INSERT INTO Region (Location) VALUES (@Location)
+END;
+CREATE PROCEDURE UpdateRegion (
+	@Region_no as int,
+	@Location as VARCHAR(64)
+) AS
+BEGIN 
+	UPDATE Region set Location = @Location WHERE Region_no = @Region_no
+END;
+CREATE PROCEDURE DeleteRegion (
+	@Region_no as int
+) AS
+BEGIN 
+	DELETE FROM Region WHERE Region_no = @Region_no
+END;
+
+
+
+
+
+
+
+
+
+
+
+Trigger
+CREATE TRIGGER UpdateAchievementNo
+ON Profile_Achievement
+AFTER UPDATE
+AS
+BEGIN
+    IF UPDATE(Distance)
+    BEGIN
+        UPDATE pa
+        SET pa.Achievement_no = (
+            SELECT TOP 1 a.Achievement_no
+            FROM Achievement a
+            WHERE a.Condition <= i.Distance
+            ORDER BY a.Condition DESC
+        )
+        FROM inserted i
+        JOIN Profile_Achievement pa ON pa.Data_no = i.Data_no
+    END
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
